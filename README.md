@@ -99,7 +99,7 @@ This project aligns with the hackathon vision: **using existing data, integratin
 ```bash
 AI-based-drop-out-prediction-and-counseling-system/
 │
-├── login/               # Login related frontend + backend code
+├── login/               # Login related frontend 
 │   ├── login.html
 │   ├── login.js
 │   └── login.css
@@ -119,9 +119,13 @@ AI-based-drop-out-prediction-and-counseling-system/
 │   ├── student.js
 │   └── student.css
 │
-├── app.py               # Main backend application (Flask/FastAPI)
-├── model.py             # ML model for drop-out prediction
-├── utils.py             # Helper functions (data loading, preprocessing, etc.)
+├── app.py               # Main backend application (FastAPI)
+├── uploads/             # Uploaded session videos
+│   └── .gitkeep
+├── assignments.xlsx
+├── upload.xlsx
+├── uploads.xls
+├── student_dt.csv          
 ├── requirements.txt     # Project dependencies
 ├── LICENSE              # MIT License
 ├── README.md            # Project documentation
