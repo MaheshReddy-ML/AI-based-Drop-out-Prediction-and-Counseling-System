@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="website icon" type="png" href="logo.png">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="../admin/admin.css">
+    <head>
+      <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  </head>
+</head>
+<body>
+    <div class="dashboard-page" id="adminDashboard">
+        <div class="sidebar" id="adminSidebar">
+          <div class="sidebar-header">
+            <h2>Admin Portal</h2>
+            <p>System Administrator</p>
+          </div>
+          <div class="sidebar-menu">
+            <div class="menu-item active" onclick="showSection(event,'admin', 'overview')">
+              <span class="menu-item-icon">🛡️</span>
+              <span class="menu-item-text">Overview</span>
+            </div>
+            <div class="menu-item" onclick="showSection(event,'admin', 'students')">
+              <span class="menu-item-icon">👥</span>
+              <span class="menu-item-text">Students</span>
+            </div>
+            <div class="menu-item" onclick="showSection(event,'admin', 'counselors')">
+              <span class="menu-item-icon">🎓</span>
+              <span class="menu-item-text">Counselors</span>
+            </div>
+            <div class="menu-item" onclick="showSection(event,'admin', 'availability')">
+              <span class="menu-item-icon">📋</span>
+              <span class="menu-item-text">Availability</span>
+            </div>
+            <div class="menu-item" onclick="showSection(event,'admin', 'supervision')">
+              <span class="menu-item-icon">📹</span>
+              <span class="menu-item-text">Supervision</span>
+            </div>
+            <div class="menu-item" onclick="showSection(event,'admin', 'analytics')">
+              <span class="menu-item-icon">📊</span>
+              <span class="menu-item-text">Analytics</span>
+            </div>
+            <div class="menu-item" onclick="showSection(event,'admin', 'reports')">
+              <span class="menu-item-icon">📈</span>
+              <span class="menu-item-text">Reports</span>
+            </div>
+            <div class="menu-item" onclick="showSection(event,'admin', 'settings')">
+              <span class="menu-item-icon">⚙️</span>
+              <span class="menu-item-text">Settings</span>
+            </div>
+          </div>
+        </div>
+    
+        <div class="main-content" id="adminMainContent">
+          <nav class="navbar">
+            <div class="navbar-left">
+              <button class="sidebar-toggle" onclick="toggleSidebar('admin')" aria-expanded="true" aria-controls="adminSidebar">☰</button>
+              <h1 class="page-title" id="adminPageTitle">Admin Overview</h1>
+            </div>
+            <div class="user-info">
+              <div class="user-avatar">A</div>
+              <div>
+                <div style="font-weight: 600;">Admin User</div>
+                <div style="font-size: 0.8rem; opacity: 0.8;">System Administrator</div>
+              </div>
+              <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+          </nav>
+    
+          <div class="container">
+            <div class="section active" id="admin-overview">
+              <div class="stats-grid animate-in">
+                <div class="stat-card total">
+                  <div class="stat-value" style="color: #4facfe;">1,247</div>
+                  <div class="stat-label">Total Students</div>
+                </div>
+                <div class="stat-card high-risk">
+                  <div class="stat-value" style="color: #e53e3e;">89</div>
+                  <div class="stat-label">High Risk Students</div>
+                </div>
+                <div class="stat-card moderate-risk">
+                  <div class="stat-value" style="color: #ed8936;">234</div>
+                  <div class="stat-label">Moderate Risk</div>
+                </div>
+                <div class="stat-card low-risk">
+                  <div class="stat-value" style="color: #38a169;">924</div>
+                  <div class="stat-label">Low Risk Students</div>
+                </div>
+              </div>
+    
+              <div class="card animate-in">
+                <h3>📊 Quick Actions</h3>
+                <div class="counselor-grid">
+                  <div class="counselor-card">
+                    <div class="counselor-header">
+                      <div class="counselor-avatar">👥</div>
+                      <div>
+                        <h4>Manage Students</h4>
+                        <p>View and manage student records</p>
+                      </div>
+                    </div>
+<button class="action-btn btn-primary" onclick="showSection(event, 'admin', 'students')">🔍 Access</button>
+                  </div>
+                  <div class="counselor-card">
+                    <div class="counselor-header">
+                      <div class="counselor-avatar">🎓</div>
+                      <div>
+                        <h4>Assign Counselors</h4>
+                        <p>Manage counselor assignments</p>
+                      </div>
+                    </div>
+<button class="action-btn btn-primary" onclick="showSection(event, 'admin', 'counselors')">📋 View Availability</button>
+                  </div>
+                  <div class="counselor-card">
+                    <div class="counselor-header">
+                      <div class="counselor-avatar">📈</div>
+                      <div>
+                        <h4>Generate Reports</h4>
+                        <p>View detailed analytics and reports</p>
+                      </div>
+                    </div>
+<button class="action-btn btn-primary" onclick="showSection(event, 'admin', 'reports')">🔍 Generate</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+            <div class="section" id="admin-students">
+              <div class="card">
+                <h3>👥 Student Risk Assessment</h3>
+                <table class="data-table" id="adminStudentsTable">
+                  <thead>
+                    <tr>
+                      <th>Student ID</th>
+                      <th>Name</th>
+                      <th>Risk Level</th>
+                      <th>Risk Score %</th>
+                      <th>Assigned Mentor</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    </tbody>
+                </table>
+              </div>
+            </div>
+    
+            <div class="section" id="admin-counselors">
+              <div class="card">
+                <h3>🎓 Counselor Management</h3>
+                <div style="margin-bottom: 2rem;">
+                  <button class="btn-primary" onclick="openAvailabilityDrawer()">📋 View Counselor Availability</button>
+                </div>
+                <div class="counselor-grid">
+                  <div class="counselor-card">
+                    <div class="counselor-header">
+                      <div class="counselor-avatar">DS</div>
+                      <div>
+                        <h4>Dr. Sarah Johnson</h4>
+                        <p><span class="status-indicator status-available"></span>Available</p>
+                        <small>Specialization: Academic Performance</small>
+                      </div>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                      <p><strong>Current Load:</strong> <span id="mentor-load-M001">2/12</span> students</p>
+                      <p><strong>Success Rate:</strong> 92%</p>
+                      <button class="action-btn btn-counsel" onclick="openAvailabilityDrawer()">👥 Assign Students</button>
+                    </div>
+                  </div>
+                  <div class="counselor-card">
+                    <div class="counselor-header">
+                      <div class="counselor-avatar">RW</div>
+                      <div>
+                        <h4>Prof. Robert Wilson</h4>
+                        <p><span class="status-indicator status-busy"></span>In Session</p>
+                        <small>Specialization: Career Guidance</small>
+                      </div>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                      <p><strong>Current Load:</strong> <span id="mentor-load-M002">12/12</span> students</p>
+                      <p><strong>Success Rate:</strong> 88%</p>
+                      <button class="action-btn btn-counsel">👥 View Assignments</button>
+                    </div>
+                  </div>
+                  <div class="counselor-card">
+                    <div class="counselor-header">
+                      <div class="counselor-avatar">ML</div>
+                      <div>
+                        <h4>Dr. Maria Lopez</h4>
+                        <p><span class="status-indicator status-away"></span>Away</p>
+                        <small>Specialization: Mental Health</small>
+                      </div>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                      <p><strong>Current Load:</strong> <span id="mentor-load-C010">5/12</span> students</p>
+                      <p><strong>Success Rate:</strong> 95%</p>
+                      <button class="action-btn btn-counsel" onclick="openAvailabilityDrawer()">👥 Assign Students</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section" id="admin-availability">
+              <div class="card">
+                <h3>📋 Availability Management</h3>
+                <div style="margin-bottom: 2rem;">
+                  <button class="btn-primary" onclick="openAvailabilityDrawer()">📋 View All Mentor Availability</button>
+                </div>
+                <div class="counselor-grid">
+                  <div class="counselor-card">
+                    <div class="counselor-header">
+                      <div class="counselor-avatar">📅</div>
+                      <div>
+                        <h4>My Schedule</h4>
+                        <p><span class="status-indicator status-available"></span>Available Now</p>
+                      </div>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                      <p><strong>Next Available:</strong> Today 3:00 PM</p>
+                      <p><strong>This Week:</strong> 8 sessions scheduled</p>
+                      <button class="action-btn btn-view" onclick="openManageScheduleModal()">📅 Manage Schedule</button>
+                    </div>
+                  </div>
+                  <div class="counselor-card">
+                    <div class="counselor-header">
+                      <div class="counselor-avatar">⏰</div>
+                      <div>
+                        <h4>Office Hours</h4>
+                        <p>Mon-Fri, 9:00 AM - 5:00 PM</p>
+                      </div>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                      <p><strong>Consultation:</strong> Walk-ins welcome</p>
+                      <p><strong>Emergency:</strong> Available 24/7</p>
+                      <button class="action-btn btn-view" onclick="openUpdateHoursModal()">⚙️ Update Hours</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ENHANCED SUPERVISION SECTION WITH JUMP ANIMATIONS -->
+            <div class="section" id="admin-supervision">
+              <div class="card">
+                <h3>📹 Mentor Supervision Videos</h3>
+                <div class="supervision-controls">
+                  <div class="filter-controls">
+                    <select id="mentorFilter" onchange="filterSupervisionVideos()">
+                      <option value="">All Mentors</option>
+                      <option value="M001">Dr. Sarah Johnson</option>
+                      <option value="M002">Prof. Robert Wilson</option>
+                      <option value="C010">Dr. Maria Lopez</option>
+                    </select>
+                    <select id="statusFilter" onchange="filterSupervisionVideos()">
+                      <option value="">All Status</option>
+                      <option value="pending">Pending Review</option>
+                      <option value="reviewed">Reviewed</option>
+                      <option value="flagged">Flagged</option>
+                    </select>
+                    <input type="date" id="dateFilter" onchange="filterSupervisionVideos()">
+                  </div>
+                  <div class="bulk-actions">
+                    <button class="btn-secondary jumpy-btn" onclick="markAllAsReviewed()">✅ Mark All as Reviewed</button>
+                    <button class="btn-secondary jumpy-btn" onclick="exportSupervisionReport()">📊 Export Report</button>
+                  </div>
+                </div>
+                <div class="video-grid" id="supervisionVideoGrid">
+                  <!-- Videos will be populated by JavaScript -->
+                </div>
+              </div>
+            </div>
+            <div class="section" id="admin-analytics">
+              <div class="card">
+                <h3>📊 System Analytics</h3>
+                <div class="stats-grid">
+                  <div class="stat-card total">
+                    <div class="stat-value" style="color: #4facfe;">87%</div>
+                    <div class="stat-label">System Accuracy</div>
+                  </div>
+                  <div class="stat-card low-risk">
+                    <div class="stat-value" style="color: #38a169;">156</div>
+                    <div class="stat-label">Successful Interventions</div>
+                  </div>
+                  <div class="stat-card moderate-risk">
+                    <div class="stat-value" style="color: #ed8936;">23</div>
+                    <div class="stat-label">Pending Cases</div>
+                  </div>
+                  <div class="stat-card high-risk">
+                    <div class="stat-value" style="color: #e53e3e;">5</div>
+                    <div class="stat-label">Critical Cases</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+<div class="section" id="admin-reports">
+  <div class="card">
+    <h3>📈 Generate Reports</h3>
+    <div class="counselor-grid">
+      <div class="counselor-card">
+        <div class="counselor-header">
+          <div class="counselor-avatar">📊</div>
+          <div>
+            <h4>Student Performance Report</h4>
+            <p>Comprehensive academic analysis</p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button id="btnGenerateStudentPerformance" class="action-btn btn-view">📄 PDF</button>
+          <button id="btnExportStudentPerformanceExcel" class="action-btn btn-primary" onclick="exportStudentPerformanceToExcel()">📊 Excel</button>
+        </div>
+      </div>
+      <div class="counselor-card">
+        <div class="counselor-header">
+          <div class="counselor-avatar">⚠️</div>
+          <div>
+            <h4>Risk Assessment Report</h4>
+            <p>Detailed dropout risk analysis</p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button id="btnGenerateRiskAssessment" class="action-btn btn-view">📄 PDF</button>
+          <button id="btnExportRiskAssessmentExcel" class="action-btn btn-primary" onclick="exportRiskAssessmentToExcel()">📊 Excel</button>
+        </div>
+      </div>
+      <div class="counselor-card">
+        <div class="counselor-header">
+          <div class="counselor-avatar">🎓</div>
+          <div>
+            <h4>Counseling Effectiveness</h4>
+            <p>Mentoring success metrics</p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button id="btnGenerateCounselingEffectiveness" class="action-btn btn-view">📄 PDF</button>
+          <button id="btnExportCounselingEffectivenessExcel" class="action-btn btn-primary" onclick="exportCounselingEffectivenessToExcel()">📊 Excel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+            <div class="section" id="admin-settings">
+              <div class="card">
+                <h3>⚙️ System Settings</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                  <div>
+                    <h4>Risk Thresholds</h4>
+                    <div class="form-group">
+                      <label>High Risk Threshold (%)</label>
+                      <input type="number" value="70" min="0" max="100">
+                    </div>
+                    <div class="form-group">
+                      <label>Moderate Risk Threshold (%)</label>
+                      <input type="number" value="40" min="0" max="100">
+                    </div>
+                    <button class="btn-primary">💾 Update Thresholds</button>
+                  </div>
+                  <div>
+                    <h4>System Configuration</h4>
+                    <div class="form-group">
+                      <label>Auto-Assignment</label>
+                      <select>
+                        <option selected>Enable automatic counselor assignment</option>
+                        <option>Disable automatic assignment</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Notification Frequency</label>
+                      <select>
+                        <option selected>Daily</option>
+                        <option>Weekly</option>
+                        <option>Monthly</option>
+                      </select>
+                    </div>
+                    <button class="btn-primary">💾 Save Settings</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Availability Drawer -->
+      <div class="availability-drawer" id="availabilityDrawer" aria-hidden="true">
+        <div class="drawer-header">
+          <h3 id="drawerTitle">🎓 Counselor Availability</h3>
+          <button class="close-btn" onclick="closeAvailabilityDrawer()">&times;</button>
+        </div>
+    
+        <div class="drawer-filters">
+          <div class="filter-group">
+            <label for="roleFilter">Role:</label>
+            <select id="roleFilter" onchange="filterAvailability()">
+              <option value="">All Roles</option>
+              <option value="mentor">Mentor</option>
+              <option value="counselor">Counselor</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="timeFilter">Availability:</label>
+            <select id="timeFilter" onchange="filterAvailability()">
+              <option value="">Any Time</option>
+              <option value="today">Today</option>
+              <option value="now">Available Now</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="searchFilter">Search:</label>
+            <input type="text" id="searchFilter" placeholder="Search by name or skill..." onkeyup="filterAvailability()">
+          </div>
+        </div>
+    
+        <div id="availabilityList">
+          </div>
+      </div>
+
+      <!-- Video Player Modal -->
+      <div class="modal" id="videoPlayerModal">
+        <div class="modal-content video-modal-content">
+          <div class="modal-header">
+            <h3 id="videoModalTitle">📹 Video Review</h3>
+            <button class="close-btn" onclick="closeVideoModal()">&times;</button>
+          </div>
+          <div class="video-player-container">
+            <video id="supervisionVideo" controls preload="metadata">
+              <p>Your browser doesn't support HTML5 video.</p>
+            </video>
+          </div>
+          <div class="video-details">
+            <div class="video-info">
+              <p><strong>Mentor:</strong> <span id="videoMentor"></span></p>
+              <p><strong>Student:</strong> <span id="videoStudent"></span></p>
+              <p><strong>Date:</strong> <span id="videoDate"></span></p>
+              <p><strong>Duration:</strong> <span id="videoDuration"></span></p>
+            </div>
+            <div class="video-actions">
+              <button class="btn-secondary" onclick="flagVideo()">🚩 Flag for Review</button>
+              <button class="btn-primary" onclick="markAsReviewed()">✅ Mark as Reviewed</button>
+              <button class="btn-secondary" onclick="downloadVideo()">⬇️ Download</button>
+            </div>
+          </div>
+          <div class="review-notes">
+            <h4>Review Notes</h4>
+            <textarea id="reviewNotes" placeholder="Add your supervision notes here..."></textarea>
+            <button class="btn-primary" onclick="saveReviewNotes()">💾 Save Notes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Details Modal -->
+      <div class="modal" id="studentDetailsModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>👤 Student Details</h3>
+            <button class="close-btn" onclick="closeModal('studentDetailsModal')">&times;</button>
+          </div>
+          <div class="counseling-strategy">
+            <h4>Recommended Strategy:</h4>
+            <p id="s-detail-strategy"></p>
+          </div>
+        </div>
+      </div>
+
+    <script src="../admin/admin.js"></script>
+</body>
+</html>
