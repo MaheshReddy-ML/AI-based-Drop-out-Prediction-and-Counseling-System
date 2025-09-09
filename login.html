@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PredictionPortal - Login</title>
+  <link rel="stylesheet" href="../login/login.css">
+</head>
+<body>
+
+  <!-- ===== LOGIN PAGE ===== -->
+  <div class="login-page" id="loginPage">
+    <div class="login-container">
+      <div class="animation-section">
+        <div class="building">
+          <div class="windows">
+            <div class="window"></div>
+            <div class="window"></div>
+            <div class="window"></div>
+            <div class="window"></div>
+          </div>
+          <div class="door" id="door">
+            <div class="door-handle"></div>
+          </div>
+          <div class="character hidden" id="character">
+            <div class="person">
+              <div class="hair"></div>
+              <div class="head cheeky"></div>
+              <div class="arms"></div>
+              <div class="body"></div>
+              <div class="skirt"></div>
+            </div>
+            <div class="floating-heart">♥</div>
+            <div class="floating-heart">♥</div>
+            <div class="floating-heart">♥</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="logo">
+          <h1>PredictionPortal</h1>
+          <p>Sign in to access your account</p>
+        </div>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="username">User ID / Email</label>
+            <input type="text" id="username" name="username" required placeholder="Enter your user ID or email" />
+          </div>
+
+          <div class="form-group">
+            <label for="role">Role</label>
+            <select id="role" name="role" required>
+              <option value="">Select your role...</option>
+              <option value="student">Student</option>
+              <option value="mentor">Mentor</option>
+              <option value="admin">Administrator</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="password-input-container">
+              <input type="password" id="password" name="password" required placeholder="Enter your password" />
+              <button type="button" class="password-toggle" id="passwordToggle" aria-label="toggle password">
+                <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <svg class="eye-off-icon hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                  <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 11 8 11 8a13.16 13.16 0 0 1-1.67 2.68"></path>
+                  <path d="M6.61 6.61A13.526 13.526 0 0 0 1 12s4 8 11 8a9.74 9.74 0 0 0 5.39-1.61"></path>
+                  <line x1="2" y1="2" x2="22" y2="22"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="login-btn" id="loginBtn">Sign In</button>
+          <div class="error-message" id="errorMessage"></div>
+          <div class="success-message" id="successMessage">Login successful! Welcome back.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../login/login.js"></script>
+</body>
+</html>
