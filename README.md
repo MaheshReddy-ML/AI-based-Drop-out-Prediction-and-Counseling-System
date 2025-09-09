@@ -62,7 +62,34 @@ This project aligns with the hackathon vision: **using existing data, integratin
 
 ---
 
+## ⚙️ Installation & Setup
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/MaheshReddy-ML/AI-based-drop-out-prediction-and-counseling-system.git
+   cd AI-based-drop-out-prediction-and-counseling-system
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Prepare your data:
+
+   * Place attendance, marks, and fee records in **XLSX format** inside the `data/` folder.
+
+4. Run the project:
+
+   ```bash
+   python app.py
+   ```
+
+---
+
 ### 👨‍💻 Contributors
 
-* Team Name : The Debug Society (TL)
+* Team Name: The Debug Society. (TL)
 * GitHub Repository: [AI-based-drop-out-prediction-and-counseling-system](https://github.com/MaheshReddy-ML/AI-based-drop-out-prediction-and-counseling-system)
