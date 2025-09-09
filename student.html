@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="../student/student.css">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="dashboard-page">
+        <div class="sidebar" id="studentSidebar">
+            <div class="sidebar-header">
+                <h2>Student Portal</h2>
+                <p id="studentSidebarName">Loading...</p>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-item active" onclick="showSection('student', 'overview')">
+                    <span class="menu-item-icon">📊</span>
+                    <span class="menu-item-text">Overview</span>
+                </div>
+                <div class="menu-item" onclick="showSection('student', 'performance')">
+                    <span class="menu-item-icon">📈</span>
+                    <span class="menu-item-text">Performance</span>
+                </div>
+                <div class="menu-item" onclick="showSection('student', 'assignments')">
+                    <span class="menu-item-icon">📝</span>
+                    <span class="menu-item-text">Assignments</span>
+                </div>
+                <div class="menu-item" onclick="showSection('student', 'attendance')">
+                    <span class="menu-item-icon">📅</span>
+                    <span class="menu-item-text">Attendance</span>
+                </div>
+                <div class="menu-item" onclick="showSection('student', 'mentoring')">
+                    <span class="menu-item-icon">🎓</span>
+                    <span class="menu-item-text">Mentoring</span>
+                </div>
+                <div class="menu-item" onclick="showSection('student', 'resources')">
+                    <span class="menu-item-icon">📚</span>
+                    <span class="menu-item-text">Resources</span>
+                </div>
+                <div class="menu-item" onclick="showSection('student', 'profile')">
+                    <span class="menu-item-icon">👤</span>
+                    <span class="menu-item-text">Profile</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content" id="studentMainContent">
+            <nav class="navbar">
+                <div class="navbar-left">
+                    <button class="sidebar-toggle" onclick="toggleSidebar('student')" aria-expanded="true" aria-controls="studentSidebar">☰</button>
+                    <h1 class="page-title" id="studentPageTitle">Overview</h1>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="studentAvatar">S</div>
+                    <div>
+                        <div style="font-weight: 600;" id="studentName">Loading...</div>
+                        <div style="font-size: 0.8rem; opacity: 0.8;" id="studentId">Student ID: ...</div>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </nav>
+
+            <div class="container">
+                <div class="section active" id="student-overview">
+                    <div class="welcome-card animate-in">
+                        <h2 id="studentWelcome">👋 Welcome back!</h2>
+                        <p>Here's your academic performance overview and personalized recommendations.</p>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                        <div class="card animate-in">
+                            <h3>📈 Your Academic Metrics</h3>
+                            <div class="metrics-grid">
+                                <div class="metric-card" style="border-left: 4px solid #4299e1;">
+                                    <div class="metric-value" style="color: #4299e1;" id="attendanceValue">--%</div>
+                                    <div class="metric-label">Attendance</div>
+                                </div>
+                                <div class="metric-card" style="border-left: 4px solid #48bb78;">
+                                    <div class="metric-value" style="color: #48bb78;" id="marksValue">--</div>
+                                    <div class="metric-label">Average Marks</div>
+                                </div>
+                                <div class="metric-card" style="border-left: 4px solid #ed8936;">
+                                    <div class="metric-value" style="color: #ed8936;" id="assignmentsValue">--%</div>
+                                    <div class="metric-label">Assignments</div>
+                                </div>
+                                <div class="metric-card" style="border-left: 4px solid #e53e3e;">
+                                    <div class="metric-value" style="color: #e53e3e;" id="backlogsValue">--</div>
+                                    <div class="metric-label">Backlogs</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card risk-overview animate-in">
+                            <h3>🎯 Risk Assessment</h3>
+                            <div class="progress-ring">
+                                <svg>
+                                    <circle class="progress-bg" cx="60" cy="60" r="45"></circle>
+                                    <circle class="progress-fill" cx="60" cy="60" r="45" id="riskCircle"></circle>
+                                </svg>
+                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                                    <div class="risk-score" id="riskScore">--%</div>
+                                </div>
+                            </div>
+                            <div class="risk-label" id="riskLabel">--</div>
+                            <p style="color: #718096; font-size: 0.9rem;" id="riskDescription">Loading assessment...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section" id="student-performance">
+                    <div class="card">
+                      <h3>📈 Academic Performance Analysis</h3>
+                      <div class="stats-grid">
+                        <div class="stat-card total">
+                          <div class="stat-value" style="color: #4facfe;">78</div>
+                          <div class="stat-label">Average Score</div>
+                        </div>
+                        <div class="stat-card moderate-risk">
+                          <div class="stat-value" style="color: #ed8936;">85%</div>
+                          <div class="stat-label">Attendance Rate</div>
+                        </div>
+                        <div class="stat-card low-risk">
+                          <div class="stat-value" style="color: #38a169;">12</div>
+                          <div class="stat-label">Completed Courses</div>
+                        </div>
+                        <div class="stat-card high-risk">
+                          <div class="stat-value" style="color: #e53e3e;">1</div>
+                          <div class="stat-label">Active Backlogs</div>
+                        </div>
+                      </div>
+                      <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem;">
+                        <h4 style="margin-bottom: 1rem;">Performance Trends</h4>
+                        <p>Your academic performance shows steady improvement over the past semester. Continue maintaining your attendance and focus on clearing your remaining backlog.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="section" id="student-assignments">
+                    <div class="card">
+                      <h3>📝 Assignment Management</h3>
+                      <table class="data-table">
+                        <thead>
+                          <tr>
+                            <th>Subject</th>
+                            <th>Assignment</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><strong>Mathematics</strong></td>
+                            <td>Calculus Problem Set 3</td>
+                            <td>Dec 15, 2024</td>
+                            <td><span class="risk-badge risk-high">Pending</span></td>
+                            <td><button class="action-btn btn-view" data-filename="Calculus_Problem_Set_3.pdf">📁 View</button></td>
+                          </tr>
+                          <tr>
+                            <td><strong>Physics</strong></td>
+                            <td>Lab Report 5</td>
+                            <td>Dec 18, 2024</td>
+                            <td><span class="risk-badge risk-moderate">In Progress</span></td>
+                            <td><button class="action-btn btn-view" data-filename="Physics_Lab_Report_5.docx">📁 View</button></td>
+                          </tr>
+                          <tr>
+                            <td><strong>Chemistry</strong></td>
+                            <td>Research Paper</td>
+                            <td>Dec 10, 2024</td>
+                            <td><span class="risk-badge risk-low">Submitted</span></td>
+                            <td><button class="action-btn btn-view" data-filename="Chemistry_Research_Paper.zip">📁 View</button></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <div class="section" id="student-attendance">
+                    <div class="card">
+                      <h3>📅 Attendance Record</h3>
+                      <div class="stats-grid">
+                        <div class="stat-card total">
+                          <div class="stat-value" style="color: #4facfe;">85%</div>
+                          <div class="stat-label">Overall Attendance</div>
+                        </div>
+                        <div class="stat-card low-risk">
+                          <div class="stat-value" style="color: #38a169;">42</div>
+                          <div class="stat-label">Classes Attended</div>
+                        </div>
+                        <div class="stat-card high-risk">
+                          <div class="stat-value" style="color: #e53e3e;">8</div>
+                          <div class="stat-label">Classes Missed</div>
+                        </div>
+                        <div class="stat-card moderate-risk">
+                          <div class="stat-value" style="color: #ed8936;">15%</div>
+                          <div class="stat-label">Improvement Needed</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="section" id="student-mentoring">
+                    <div class="card">
+                      <h3>🎓 Mentoring Sessions</h3>
+                      <div style="margin-bottom: 1.5rem; padding: 1rem; background: #e3f2fd; border-radius: 8px;">
+                        <h4>Your Mentor: Dr. Sarah Johnson</h4>
+                        <p>Next session scheduled for December 15, 2024 at 2:00 PM</p>
+                      </div>
+                      <div class="session-item">
+                        <div style="font-weight: 600; margin-bottom: 0.3rem;">Upcoming Session - Dec 15, 2:00 PM</div>
+                        <div style="color: #718096; font-size: 0.9rem; margin-bottom: 0.5rem;">Academic Performance Review (1 hour)</div>
+                        <button class="action-btn btn-message">💬 Message Mentor</button>
+                      </div>
+                      <div class="session-item completed">
+                        <div style="font-weight: 600; margin-bottom: 0.3rem;">Previous Session - Dec 8, 10:00 AM</div>
+                        <div style="color: #718096; font-size: 0.9rem; margin-bottom: 0.5rem;">Study Strategy Discussion (45 mins)</div>
+                        <div style="color: #38a169; font-size: 0.8rem;">✅ Session Completed</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="section" id="student-resources">
+                    <div class="card">
+                      <h3>📚 Learning Resources</h3>
+                      <div class="counselor-grid">
+                        <div class="counselor-card">
+                          <div class="counselor-header">
+                            <div class="counselor-avatar">📖</div>
+                            <div>
+                              <h4>Study Materials</h4>
+                              <p>Access course materials and notes</p>
+                            </div>
+                          </div>
+                          <button class="action-btn btn-view">📁 Access</button>
+                        </div>
+                        <div class="counselor-card">
+                          <div class="counselor-header">
+                            <div class="counselor-avatar">🎥</div>
+                            <div>
+                              <h4>Video Lectures</h4>
+                              <p>Recorded sessions and tutorials</p>
+                            </div>
+                          </div>
+                          <button class="action-btn btn-view">📁 Watch</button>
+                        </div>
+                        <div class="counselor-card">
+                          <div class="counselor-header">
+                            <div class="counselor-avatar">💬</div>
+                            <div>
+                              <h4>Discussion Forum</h4>
+                              <p>Connect with peers and instructors</p>
+                            </div>
+                          </div>
+                          <button class="action-btn btn-view">📁 Join</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="section" id="student-profile">
+                    <div class="card">
+                      <h3>👤 Profile Settings</h3>
+                      <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                        <div>
+                          <div class="user-avatar" style="width: 100px; height: 100px; font-size: 2rem; margin: 0 auto 1rem;">S</div>
+                          <button class="action-btn btn-view" style="width: 100%;">📷 Change Photo</button>
+                        </div>
+                        <div>
+                          <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" value="John Doe" readonly>
+                          </div>
+                          <div class="form-group">
+                            <label>Student ID</label>
+                            <input type="text" value="S0001" readonly>
+                          </div>
+                          <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" value="john.doe@example.com">
+                          </div>
+                          <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" value="+1 (555) 123-4567">
+                          </div>
+                          <button class="btn-primary">💾 Update Profile</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    <!-- Message Modal -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💬 Message Your Mentor</h3>
+                <button class="close-btn" onclick="closeModal('messageModal')">×</button>
+            </div>
+            <form id="messageForm">
+                <div class="form-group">
+                    <label for="messageSubject">Subject</label>
+                    <input type="text" id="messageSubject" placeholder="Enter message subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="messageBody">Message</label>
+                    <textarea id="messageBody" rows="6" placeholder="Type your message here..." required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('messageModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">📤 Send Message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="../student/student.js"></script>
+</body>
+</html>
