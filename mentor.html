@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Mentor Dashboard - PredictionPortal</title>
+        <link rel="stylesheet" href="../mentor/mentor.css">
+        <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+    </head>
+<body>
+
+    <div class="dashboard-page" id="mentorDashboard">
+
+        <div class="sidebar" id="mentorSidebar">
+            <div class="sidebar-header">
+                <h2>Mentor Portal</h2>
+                <p id="mentorSidebarName">Dr. Sarah Johnson</p>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-item active" onclick="showSection(event, 'mentor', 'overview')">
+                    <span class="menu-item-icon">🎓</span>
+                    <span class="menu-item-text">Overview</span>
+                </div>
+                <div class="menu-item" onclick="showSection(event, 'mentor', 'mentees')">
+                    <span class="menu-item-icon">👥</span>
+                    <span class="menu-item-text">My Mentees</span>
+                </div>
+                <div class="menu-item" onclick="showSection(event, 'mentor', 'sessions')">
+                    <span class="menu-item-icon">📅</span>
+                    <span class="menu-item-text">Sessions</span>
+                </div>
+                <div class="menu-item" onclick="showSection(event, 'mentor', 'progress')">
+                    <span class="menu-item-icon">📈</span>
+                    <span class="menu-item-text">Progress Tracking</span>
+                </div>
+                <div class="menu-item" onclick="showSection(event, 'mentor', 'resources')">
+                    <span class="menu-item-icon">📚</span>
+                    <span class="menu-item-text">Resources</span>
+                </div>
+                <div class="menu-item" onclick="showSection(event, 'mentor', 'profile')">
+                    <span class="menu-item-icon">👤</span>
+                    <span class="menu-item-text">Profile</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content" id="mentorMainContent">
+
+            <nav class="navbar">
+                <div class="navbar-left">
+                    <button class="sidebar-toggle" onclick="toggleSidebar('mentor')" aria-expanded="true" aria-controls="mentorSidebar">☰</button>
+                    <h1 class="page-title" id="mentorPageTitle">Mentor Overview</h1>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="mentorAvatar">M</div>
+                    <div>
+                        <div style="font-weight: 600;" id="mentorName">Dr. Sarah Johnson</div>
+                        <div style="font-size: 0.8rem; opacity: 0.8;">Senior Mentor</div>
+                    </div>
+                    <!-- Add availability button -->
+                    <!-- <button class="action-btn" onclick="openAvailabilityDrawer()" style="margin-right: 1rem;">🟢 Availability</button> -->
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </nav>
+            
+            <div class="container">
+
+                <!-- Overview Section -->
+                <div class="section active" id="mentor-overview">
+                    <div class="welcome-card animate-in">
+                        <h2 id="mentorWelcome">👋 Welcome back, Dr. Johnson!</h2>
+                        <p>You're making a real difference in your mentees' academic journey. Here's your mentoring overview.</p>
+                    </div>
+                    <div class="stats-grid animate-in">
+                        <div class="stat-card total">
+                            <div class="stat-value" style="color: #4facfe;" id="mentor-mentee-count">0</div>
+                            <div class="stat-label">Active Mentees</div>
+                        </div>
+                        <div class="stat-card moderate-risk">
+                            <div class="stat-value" style="color: #43e97b;">8</div>
+                            <div class="stat-label">Sessions This Week</div>
+                        </div>
+                        <div class="stat-card high-risk">
+                            <div class="stat-value" style="color: #fa709a;">3</div>
+                            <div class="stat-label">Pending Submissions</div>
+                        </div>
+                        <div class="stat-card low-risk">
+                            <div class="stat-value" style="color: #a8edea;">75%</div>
+                            <div class="stat-label">Completion Rate</div>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <div class="card animate-in">
+                            <h3>👥 Priority Mentees</h3>
+                            <div id="priorityMenteeList">
+                                <div style="text-align: center; padding: 2rem; color: #4a5568; font-weight: 500;">
+                                    <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                                        <div style="width: 16px; height: 16px; border: 2px solid #e2e8f0; border-top: 2px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                                        <span>Analyzing priority cases...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card animate-in">
+                            <h3>📅 Today's Schedule</h3>
+                            <div id="todaySessionsList">
+                                <div class="session-item pending" id="session1">
+                                    <div style="font-weight: 600; margin-bottom: 0.3rem;">2:00 PM - Jane Smith</div>
+                                    <div style="color: #718096; font-size: 0.9rem; margin-bottom: 0.5rem;">Academic Recovery Plan (1 hour)</div>
+                                    <button class="action-btn btn-complete" onclick="completeSession('session1', 'Jane Smith')">🔹 Complete Session</button>
+                                </div>
+                                <div class="session-item completed" id="session2">
+                                    <div style="font-weight: 600; margin-bottom: 0.3rem;">10:00 AM - Alex Brown</div>
+                                    <div style="color: #718096; font-size: 0.9rem; margin-bottom: 0.5rem;">Study Skills Workshop (45 mins)</div>
+                                    <div style="color: #38a169; font-size: 0.8rem;">✅ Video Submitted & Verified</div>
+                                </div>
+                            </div>
+                            <!-- Add mentor schedule container -->
+                            <div id="mentorScheduleContainer"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mentees Section -->
+                <div class="section" id="mentor-mentees">
+                    <div class="card">
+                        <h3>👥 All Mentees</h3>
+                        <table class="data-table" id="mentorMenteesTable">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Risk Level</th>
+                                    <th>Last Session</th>
+                                    <th>Progress</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" style="text-align: center;">Loading mentees...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="card" style="margin-top: 2rem;">
+                        <h3>📁 Upload Assignment</h3>
+                        <form id="assignmentUploadForm" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="assignmentMenteeSelect">Assign To:</label>
+                                <select id="assignmentMenteeSelect" required>
+                                    <option value="">Select a mentee...</option>
+                                    <option value="all">All Mentees</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="assignmentTitle">Assignment Title:</label>
+                                <input type="text" id="assignmentTitle" placeholder="e.g., Research Paper Outline" required maxlength="100">
+                            </div>
+                            <div class="form-group">
+                                <label for="assignmentInstructions">Instructions:</label>
+                                <textarea id="assignmentInstructions" rows="4" placeholder="Provide clear instructions..." maxlength="1000"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="assignmentFile">Attach File:</label>
+                                <input type="file" id="assignmentFile" accept=".pdf,.doc,.docx,.txt,.xlsx,.xls,.mp4,.mov,.avi,.mkv" required>
+                                <small style="color: #6c757d;">Supported: Documents (PDF, DOC, DOCX, TXT, XLS, XLSX) or Videos (MP4, MOV, AVI, MKV)</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="assignmentDueDate">Due Date:</label>
+                                <input type="date" id="assignmentDueDate" required>
+                            </div>
+                            <div style="display: flex; gap: 1rem;">
+                                <button type="submit" class="btn-primary" onmouseover="this.style.transform='translateY(-1px)';" onmouseout="this.style.transform='translateY(0)';">📤 Upload Assignment</button>
+                                <button type="button" class="btn-secondary" onclick="createTestAssignment()" style="font-size: 0.8rem; padding: 0.5rem 1rem; border-radius: 8px; background: #edf2f7; color: #4a5568; border: 1px solid #cbd5e0; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.background='#e2e8f0'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='#edf2f7'; this.style.transform='translateY(0)';">🧪 Create Test Assignment</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="card" style="margin-top: 2rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3>📜 Assignment History </h3>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn-secondary" onclick="debugAssignments()" style="font-size: 0.8rem; padding: 0.5rem 1rem; border-radius: 8px; background: #edf2f7; color: #4a5568; border: 1px solid #cbd5e0; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.background='#e2e8f0'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='#edf2f7'; this.style.transform='translateY(0)';">🔍 Debug</button>
+                                <button class="btn-secondary" onclick="exportAssignments()" style="font-size: 0.8rem; padding: 0.5rem 1rem; border-radius: 8px; background: #bee3f8; color: #2b6cb0; border: 1px solid #90cdf4; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.background='#90cdf4'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='#bee3f8'; this.style.transform='translateY(0)';">📁 Export</button>
+                                <button class="btn-secondary" onclick="clearAllAssignments()" style="font-size: 0.8rem; padding: 0.5rem 1rem; border-radius: 8px; background: #fed7d7; color: #e53e3e; border: 1px solid #feb2b2; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.background='#feb2b2'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='#fed7d7'; this.style.transform='translateY(0)';">🗑️ Clear All</button>
+                            </div>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Assignment Title</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="assignmentHistoryTableBody">
+                                <tr>
+                                    <td colspan="4" style="text-align: center;">Loading assignment history...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Sessions Section -->
+                <div class="section" id="mentor-sessions">
+                    <div class="card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                            <h3>📅 Session Management</h3>
+                            <div style="display: flex; gap: 1rem;">
+                                <button class="btn-primary" onclick="openScheduleModal()">+ Schedule New Session</button>
+                                <button class="btn-secondary" onclick="openManageScheduleModal()">📋 Manage Schedule</button>
+                                <button class="btn-secondary" onclick="openUpdateHoursModal()">⏰ Update Hours</button>
+                            </div>
+                        </div>
+                        <div id="allSessionsList">
+                            <div class="session-item pending">
+                                <div style="font-weight: 600; margin-bottom: 0.3rem;">Tomorrow, 3:00 PM - Sarah Davis</div>
+                                <div style="color: #718096; font-size: 0.9rem; margin-bottom: 0.5rem;">Career Guidance Session (1 hour)</div>
+                                <button class="action-btn btn-message" onclick="openMessageModal('S0002')">💬 Message</button>
+                                <button class="action-btn btn-schedule" onclick="editSession('session_tomorrow_1500')">📝 Edit</button>
+                            </div>
+                            <div class="session-item pending">
+                                <div style="font-weight: 600; margin-bottom: 0.3rem;">Dec 16, 10:00 AM - John Doe</div>
+                                <div style="color: #718096; font-size: 0.9rem; margin-bottom: 0.5rem;">Study Strategy Review (45 mins)</div>
+                                <button class="action-btn btn-message" onclick="openMessageModal('S0001')">💬 Message</button>
+                                <button class="action-btn btn-schedule" onclick="editSession('session_1216_1000')">📝 Edit</button>
+                            </div>
+                            <div class="session-item completed">
+                                <div style="font-weight: 600; margin-bottom: 0.3rem;">Yesterday, 2:00 PM - Emma Wilson</div>
+                                <div style="color: #718096; font-size: 0.9rem; margin-bottom: 0.5rem;">Academic Planning (1 hour)</div>
+                                <div style="color: #38a169; font-size: 0.8rem;">✅ Session Completed - Video Uploaded</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Section -->
+                <div class="section" id="mentor-progress">
+                    <div class="card">
+                        <h3>📈 Progress Tracking</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card total">
+                                <div class="stat-value" style="color: #4facfe;">156</div>
+                                <div class="stat-label">Total Sessions</div>
+                            </div>
+                            <div class="stat-card low-risk">
+                                <div class="stat-value" style="color: #38a169;">89%</div>
+                                <div class="stat-label">Success Rate</div>
+                            </div>
+                            <div class="stat-card moderate-risk">
+                                <div class="stat-value" style="color: #ed8936;">4.8</div>
+                                <div class="stat-label">Average Rating</div>
+                            </div>
+                            <div class="stat-card high-risk">
+                                <div class="stat-value" style="color: #e53e3e;">12</div>
+                                <div class="stat-label">Critical Interventions</div>
+                            </div>
+                        </div>
+                        <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem;">
+                            <h4>Monthly Performance Summary</h4>
+                            <p>This month you've conducted 23 sessions with a 91% attendance rate. Your mentees show an average improvement of 15% in their risk scores.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resources Section -->
+                <div class="section" id="mentor-resources">
+                    <div class="card">
+                        <h3>📚 Mentoring Resources</h3>
+                        <div class="counselor-grid">
+                            <div class="counselor-card">
+                                <div class="counselor-header">
+                                    <div class="counselor-avatar">📖</div>
+                                    <div>
+                                        <h4>Mentoring Guidelines</h4>
+                                        <p>Best practices and protocols</p>
+                                    </div>
+                                </div>
+                                <button class="action-btn btn-view">📄 Access</button>
+                            </div>
+                            <div class="counselor-card">
+                                <div class="counselor-header">
+                                    <div class="counselor-avatar">🎯</div>
+                                    <div>
+                                        <h4>Intervention Strategies</h4>
+                                        <p>Risk-specific approaches</p>
+                                    </div>
+                                </div>
+                                <button class="action-btn btn-view">📄 View</button>
+                            </div>
+                            <div class="counselor-card">
+                                <div class="counselor-header">
+                                    <div class="counselor-avatar">📊</div>
+                                    <div>
+                                        <h4>Assessment Tools</h4>
+                                        <p>Student evaluation forms</p>
+                                    </div>
+                                </div>
+                                <button class="action-btn btn-view">📄 Download</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Section -->
+                <div class="section" id="mentor-profile">
+                    <div class="card">
+                        <h3>👤 Mentor Profile</h3>
+                        <form id="profileForm">
+                            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                                <div>
+                                    <div class="user-avatar" id="profileAvatar" style="width: 100px; height: 100px; font-size: 2rem; margin: 0 auto 1rem;">M</div>
+                                    <input type="file" id="photoUploadInput" accept="image/*" style="display: none;">
+                                    <button type="button" class="action-btn btn-view" style="width: 100%;" onclick="triggerPhotoUpload()">📷 Change Photo</button>
+                                </div>
+                                <div>
+                                    <div class="form-group">
+                                        <label>Full Name</label>
+                                        <input type="text" id="profileName" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Mentor ID</label>
+                                        <input type="text" id="profileId" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Specialization</label>
+                                        <input type="text" id="profileSpecialization" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="email" id="profileEmail" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Office Hours</label>
+                                        <input type="text" id="profileHours" placeholder="e.g., Mon-Fri, 9:00 AM - 5:00 PM" required>
+                                    </div>
+                                    <button type="submit" class="btn-primary">💾 Update Profile</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+   
+
+<!-- Session Completion Modal -->
+<div class="modal" id="sessionCompletionModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>🔹 Complete Session</h3>
+            <button class="close-btn" onclick="closeModal('sessionCompletionModal')">&times;</button>
+        </div>
+        <div class="session-completion-warning">
+            <strong>⚠️ Important:</strong> You must upload the session recording video to complete this session.
+        </div>
+        <form id="sessionCompletionForm">
+            <div class="form-group">
+                <label>Session Details:</label>
+                <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <div id="sessionDetails">Loading session details...</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="sessionSummary">Session Summary:</label>
+                <textarea id="sessionSummary" placeholder="Provide a brief summary..." required maxlength="500"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="sessionOutcomes">Key Outcomes & Action Items:</label>
+                <textarea id="sessionOutcomes" placeholder="List the main outcomes..." required maxlength="500"></textarea>
+            </div>
+
+            <!-- ADD THIS NEW FORM GROUP HERE -->
+            <div class="form-group">
+                <label for="studentFeeling">Student's Feeling After Session:</label>
+                <select id="studentFeeling" required>
+                    <option value="">Select feeling...</option>
+                    <option value="positive">Positive 😊</option>
+                    <option value="neutral">Neutral 😐</option>
+                    <option value="negative">Negative 😟</option>
+                    <option value="motivated">Motivated 💪</option>
+                    <option value="confused">Confused 🤔</option>
+                    <option value="relieved">Relieved 😌</option>
+                    <option value="hopeful">Hopeful ✨</option>
+                </select>
+            </div>
+            <!-- END OF NEW FORM GROUP -->
+
+            <!-- Enhanced Drag & Drop Upload Section -->
+                <div class="form-group">
+                    <label>Session Recording Upload: <span style="color: #e53e3e;">*Required</span></label>
+                    <div class="enhanced-upload-section" id="enhancedUploadSection">
+                        <!-- Upload Section (shown initially) -->
+                        <div class="upload-section" id="videoUploadSection">
+                            <div class="upload-drop-zone" id="uploadDropZone">
+                                <div class="upload-zone-content">
+                                    <div class="upload-icon" id="uploadIcon">🎥</div>
+                                    <h4 id="uploadTitle">Upload Session Recording</h4>
+                                    <p style="color: #6c757d; margin: 1rem 0;" id="uploadDescription">
+                                        Drag & drop your video file here or click to browse<br>
+                                        <small>Supported formats: MP4, MOV, AVI, MKV (Max size: 500MB)</small>
+                                    </p>
+                                    <button type="button" class="upload-button" id="uploadButton" onclick="document.getElementById('videoFile').click()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.6)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.4)';">Choose Video File</button>
+                                    <input type="file" id="videoFile" class="video-file-input" accept="video/*" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="uploadErrorMessage" style="color: #e53e3e; font-weight: 600; margin-top: 0.5rem; display: none;">Invalid file type or size. Please upload a supported video file (Max 500MB).</div>
+
+                    <!-- Upload Progress Section -->
+                    <div class="upload-progress-section" id="uploadProgressSection" style="display: none;">
+                        <div class="progress-container">
+                            <div class="progress-info">
+                                <span class="progress-filename" id="progressFilename">Uploading...</span>
+                                <span class="progress-percentage" id="progressPercentage">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                            </div>
+                            <div class="progress-details">
+                                <span id="progressSpeed">0 MB/s</span>
+                                <span id="progressETA">--:-- remaining</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video Preview Section (shown after successful upload) -->
+                    <div class="video-preview-section" id="videoPreviewSection" style="display: none; margin-top: 1.5rem; padding: 1rem; background: #f8fafc; border-radius: 12px; border: 2px solid #e2e8f0;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <div style="font-size: 2rem;">✅</div>
+                            <div>
+                                <h4 style="margin: 0; color: #38a169;">Video Uploaded Successfully!</h4>
+                                <p style="margin: 0.25rem 0; color: #6c757d; font-size: 0.9rem;" id="uploadSuccessMessage">Your session recording has been uploaded and processed.</p>
+                            </div>
+                        </div>
+
+                        <div class="upload-details" id="uploadDetails" style="background: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                            <h5 style="margin: 0 0 0.5rem 0; color: #4a5568;">📋 Upload Details</h5>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.9rem;">
+                                <div><strong>File Name:</strong> <span id="uploadedFileName">-</span></div>
+                                <div><strong>File Size:</strong> <span id="uploadedFileSize">-</span></div>
+                                <div><strong>Upload Time:</strong> <span id="uploadTimestamp">-</span></div>
+                                <div><strong>Status:</strong> <span id="uploadStatus" style="color: #38a169;">✅ Verified</span></div>
+                            </div>
+                        </div>
+
+                        <div class="video-player-container" style="background: #1a202c; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <h5 style="margin: 0; color: white;">🎬 Video Preview</h5>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn-small" id="playPauseBtn" onclick="toggleVideoPlayback()" style="background: #667eea; color: white; border: none; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">▶️ Play</button>
+                                    <button class="btn-small" onclick="downloadVideo()" style="background: #38a169; color: white; border: none; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">⬇️ Download</button>
+                                </div>
+                            </div>
+                            <video id="uploadedVideoPlayer" controls style="width: 100%; max-height: 300px; border-radius: 4px;" preload="metadata">
+                                <source id="videoSource" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; color: #a0aec0; font-size: 0.8rem;">
+                                <span id="videoDuration">Duration: --:--</span>
+                                <span id="videoResolution">Resolution: ---</span>
+                            </div>
+                        </div>
+
+                        <div class="upload-actions" style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                            <button class="btn-secondary" id="clearVideoBtn" onclick="clearVideo()" style="font-size: 0.8rem; padding: 0.5rem 1rem;">🗑️ Clear Video</button>
+                            <button class="btn-secondary" onclick="reuploadVideo()" style="font-size: 0.8rem; padding: 0.5rem 1rem;">🔄 Re-upload</button>
+                            <button class="btn-secondary" onclick="shareVideoLink()" style="font-size: 0.8rem; padding: 0.5rem 1rem;">🔗 Share Link</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                <button type="button" class="btn-secondary action-btn" onclick="closeModal('sessionCompletionModal')">Cancel</button>
+                <button type="submit" class="btn-primary" id="submitSessionBtn" disabled>
+                    <span id="submitBtnText">🔹 Upload Video Required</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+    <!-- Schedule Modal -->
+    <div class="modal" id="scheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📅 Schedule Mentoring Session</h3>
+                <button class="close-btn" onclick="closeModal('scheduleModal')">&times;</button>
+            </div>
+            <form id="scheduleForm">
+                <div class="form-group">
+                    <label for="sessionDate">Date & Time:</label>
+                    <input type="datetime-local" id="sessionDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="sessionTopic">Session Topic:</label>
+                    <input type="text" id="sessionTopic" placeholder="e.g., Academic Performance Review" required maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label for="sessionDuration">Duration:</label>
+                    <select id="sessionDuration" required>
+                        <option value="30">30 minutes</option>
+                        <option value="45">45 minutes</option>
+                        <option value="60" selected>1 hour</option>
+                        <option value="90">1.5 hours</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn-secondary action-btn" onclick="closeModal('scheduleModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Schedule Session</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Message Modal -->
+    <div class="modal" id="messageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💬 Send Message</h3>
+                <button class="close-btn" onclick="closeModal('messageModal')">&times;</button>
+            </div>
+            <form id="messageForm">
+                <div class="form-group">
+                    <label for="messageSubject">Subject:</label>
+                    <input type="text" id="messageSubject" required maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label for="messageBody">Message:</label>
+                    <textarea id="messageBody" rows="6" placeholder="Type your message here..." required maxlength="1000"></textarea>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn-secondary" onclick="closeModal('messageModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Send Message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Update Office Hours Modal -->
+    <div class="modal" id="updateHoursModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⏰ Update Office Hours</h3>
+                <button class="close-btn" onclick="closeModal('updateHoursModal')">&times;</button>
+            </div>
+            <form id="officeHoursForm">
+                <div class="form-group">
+                    <label for="officeHoursText">Office Hours:</label>
+                    <input type="text" id="officeHoursText" placeholder="e.g., Mon-Fri, 9:00 AM - 5:00 PM" required>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn-secondary" onclick="closeModal('updateHoursModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Update Hours</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Manage Schedule Modal -->
+    <div class="modal" id="manageScheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📋 Manage Schedule</h3>
+                <button class="close-btn" onclick="closeModal('manageScheduleModal')">&times;</button>
+            </div>
+            <div style="margin-bottom: 2rem;">
+                <p>Here you can view and manage all your scheduled sessions.</p>
+            </div>
+            <div id="scheduleManagementList">
+                <div class="session-item">
+                    <div>Tomorrow, 3:00 PM - Sarah Davis</div>
+                    <div style="margin-top: 0.5rem;">
+                        <button class="btn-secondary" onclick="editSession('session_tomorrow_1500')">Edit</button>
+                        <button class="btn-secondary" onclick="cancelSession('session_tomorrow_1500')" style="color: #e53e3e;">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: right; margin-top: 2rem;">
+                <button class="btn-secondary" onclick="closeModal('manageScheduleModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Availability Drawer -->
+    <div class="availability-drawer" id="availabilityDrawer">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h3>🟢 Counselor Availability</h3>
+                <button class="close-btn" onclick="closeAvailabilityDrawer()">&times;</button>
+            </div>
+            <div class="drawer-filters">
+                <select id="statusFilter" onchange="filterAvailability()">
+                    <option value="all">All Status</option>
+                    <option value="available">Available</option>
+                    <option value="busy">Busy</option>
+                </select>
+                <select id="skillFilter" onchange="filterAvailability()">
+                    <option value="all">All Skills</option>
+                    <option value="academic">Academic Support</option>
+                    <option value="career">Career Guidance</option>
+                    <option value="mental">Mental Health</option>
+                </select>
+            </div>
+            <div id="availabilityList"></div>
+            <div id="availabilityContainer"></div>
+        </div>
+    </div>
+
+    <script src="../mentor/mentor.js"></script>
+</body>
+</html>
