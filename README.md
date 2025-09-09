@@ -1,4 +1,37 @@
 # AI-based Drop-out Prediction and Counseling System 
+## 📂 Project Structure
+
+```bash
+AI-based-drop-out-prediction-and-counseling-system/
+│
+├── login/               # Login related frontend + backend code
+│   ├── login.html
+│   ├── login.js
+│   └── login.css
+│
+├── admin/               # Admin dashboard & controls
+│   ├── admin.html
+│   ├── admin.js
+│   └── admin.css
+│
+├── mentor/              # Mentor dashboard, video upload, student tracking
+│   ├── mentor.html
+│   ├── mentor.js
+│   └── mentor.css
+│
+├── student/             # Student dashboard (attendance, marks, fee insights)
+│   ├── student.html
+│   ├── student.js
+│   └── student.css
+│
+├── app.py               # Main backend application (Flask/FastAPI)
+├── model.py             # ML model for drop-out prediction
+├── utils.py             # Helper functions (data loading, preprocessing, etc.)
+├── requirements.txt     # Project dependencies
+├── LICENSE              # MIT License
+├── README.md            # Project documentation
+└── .gitignore           # Ignore unnecessary files
+
 
 ## 📌 Background
 
